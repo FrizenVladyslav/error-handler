@@ -1,5 +1,5 @@
 import * as dotenv from 'dotenv';
-import * as fs from 'fs';
+import * as path from 'path';
 import { Injectable } from '@nestjs/common';
 
 export interface EnvData {
@@ -15,30 +15,47 @@ export interface EnvData {
   DB_PASSWORD: string;
 }
 
+const root = path.join.bind(this, __dirname);
+dotenv.config({ path: root('../.env') });
+
+export default {
+  PORT: process.env.PORT || 8080,
+  IS_PODUCTION: process.env.NODE_ENV === 'production',
+  JWT_SECRET: process.env.JWT_SECRET || 'secret',
+  DB: {
+    HOST: process.env.HOST || 'localhost',
+    NAME: process.env.DB || 'postal',
+    USER: process.env.USR || 'root',
+    PASSWORD: process.env.PASSWORD || '',
+    PORT: process.env.DBPORT || 3306,
+  },
+}
+
 @Injectable()
 export class EnvService {
-  private vars: EnvData;
+  private config: EnvData;
 
   constructor() {
-    const environment = process.env.NODE_ENV || 'development';
-    const data: any = dotenv.parse(fs.readFileSync(`.env`));
-
-    data.APP_ENV = environment;
-    data.APP_DEBUG = data.APP_DEBUG === 'true' ? true : false;
-    data.DB_PORT = parseInt(data.DB_PORT);
-
-    this.vars = data as EnvData;
+    this.config = {
+      APP_ENV: process.env.NODE_ENV || 'development',
+      APP_DEBUG: !!process.env.APP_DEBUG,
+      DB_HOST: process.env.DB_HOST,
+      DB_NAME: process.env.DB_NAME,
+      DB_PORT: Number(process.env.DB_PORT),
+      DB_USER: process.env.DB_USER,
+      DB_PASSWORD: process.env.DB_PASSWORD,
+    };
   }
 
   get read(): EnvData {
-    return this.vars;
+    return this.config;
   }
 
   get isDev(): boolean {
-    return this.vars.APP_ENV === 'development';
+    return this.config.APP_ENV === 'development';
   }
 
   get isProd(): boolean {
-    return this.vars.APP_ENV === 'production';
+    return this.config.APP_ENV === 'production';
   }
 }
