@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { MorganModule } from 'nest-morgan';
 import { EnvModule } from './config/env.module';
 import { ProjectsModule } from './projects/projects.module';
 import { ErrorsModule } from './errors/errors.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { EnvService } from './config/env.service';
 
 @Module({
@@ -22,6 +23,7 @@ import { EnvService } from './config/env.service';
       }),
       inject: [EnvService],
     }),
+    MorganModule.forRoot(),
     ProjectsModule,
     ErrorsModule,
   ],

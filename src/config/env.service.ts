@@ -16,21 +16,7 @@ export interface EnvData {
 }
 
 const root = path.join.bind(this, __dirname);
-dotenv.config({ path: root('../.env') });
-
-export default {
-  PORT: process.env.PORT || 8080,
-  IS_PODUCTION: process.env.NODE_ENV === 'production',
-  JWT_SECRET: process.env.JWT_SECRET || 'secret',
-  DB: {
-    HOST: process.env.HOST || 'localhost',
-    NAME: process.env.DB || 'postal',
-    USER: process.env.USR || 'root',
-    PASSWORD: process.env.PASSWORD || '',
-    PORT: process.env.DBPORT || 3306,
-  },
-}
-
+dotenv.config({ path: root('../../.env') });
 @Injectable()
 export class EnvService {
   private config: EnvData;
