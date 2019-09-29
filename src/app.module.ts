@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { MorganModule } from 'nest-morgan';
+import { MorganModule, MorganInterceptor } from 'nest-morgan';
 import { EnvModule } from './config/env.module';
 import { ProjectsModule } from './projects/projects.module';
 import { ErrorsModule } from './errors/errors.module';
 import { EnvService } from './config/env.service';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -26,6 +27,12 @@ import { EnvService } from './config/env.service';
     MorganModule.forRoot(),
     ProjectsModule,
     ErrorsModule,
+  ],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: MorganInterceptor('dev'),
+    },
   ],
 })
 export class AppModule {}
