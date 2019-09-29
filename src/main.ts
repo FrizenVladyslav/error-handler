@@ -12,6 +12,7 @@ async function bootstrap() {
     .setTitle('Error handler')
     .setDescription('The API catching errors on our projects')
     .setVersion('1.0')
+    .setSchemes('https')
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api', app, document);
