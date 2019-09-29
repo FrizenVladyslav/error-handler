@@ -34,6 +34,7 @@ export class EnvService {
   }
 
   get read(): EnvData {
+    console.log('env', process.env);
     return this.config;
   }
 
